@@ -22,11 +22,11 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
 
         public bool Create(Dish entity)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
                 string query = $"INSERT INTO dishes VALUES (@name,@price,@recipe)";
-                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                using (var cmd = new SqlCommand(query, sqlConnection))
                 {
                     cmd.Parameters.Add("@name", SqlDbType.NChar).Value = entity.Name;
                     cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = entity.Price;
@@ -39,11 +39,11 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
 
         public bool Delete(int id)
         {
-            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
                 string query = $"DELETE FROM dishes WHERE _id = @id";
-                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                using (var cmd = new SqlCommand(query, sqlConnection))
                 {
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
                     cmd.ExecuteNonQuery();
