@@ -49,7 +49,7 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             }
             return true;
         }
-
+        
         public DishIngredient Get(int id)
         {
             var dishIngredient = new DishIngredient();
