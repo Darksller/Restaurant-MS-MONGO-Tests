@@ -10,27 +10,25 @@ using System.Threading.Tasks;
 
 namespace Restaurant.DAL.Repositories.MsServerRepository
 {
-    public class OrderDishRepositoryMS : IOrderDishRepository
+    public class DishIngredientRepositoryMS : IDishIngredientRepository
     {
         private readonly string _connectionString;
 
-        public OrderDishRepositoryMS(string connectionString)
+        public DishIngredientRepositoryMS(string connectionString)
         {
             _connectionString = connectionString;
         }
 
-        public bool Create(OrderDish entity)
+        public bool Create(DishIngredient entity)
         {
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                string query = $"INSERT INTO orderList (idOrder,idDish,count,price) VALUES (@idOrder,@idDish,@count,@price)";
+                string query = $"INSERT INTO dishIngredients (idIngredient,idDish) VALUES (@idIngredient,@idDish)";
                 using (var cmd = new SqlCommand(query, sqlConnection))
                 {
-                    cmd.Parameters.Add("@idOrder", SqlDbType.Int).Value = entity.idOrder;
-                    cmd.Parameters.Add("@idDish", SqlDbType.Int).Value = entity.Price;
-                    cmd.Parameters.Add("@count", SqlDbType.Int).Value = entity.Count;
-                    cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = entity.Price;
+                    cmd.Parameters.Add("@idIngredient", SqlDbType.Int).Value = entity.idIngredient;
+                    cmd.Parameters.Add("@idDish", SqlDbType.Int).Value = entity.idDish;
                     cmd.ExecuteNonQuery();
                 }
             }
@@ -42,7 +40,7 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             using (var sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                string query = $"DELETE FROM orderList WHERE _id = @id";
+                string query = $"DELETE FROM dishIngredients WHERE _id = @id";
                 using (var cmd = new SqlCommand(query, sqlConnection))
                 {
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -52,13 +50,13 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             return true;
         }
 
-        public OrderDish Get(int id)
+        public DishIngredient Get(int id)
         {
-            var orderDish = new OrderDish();
+            var dishIngredient = new DishIngredient();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                string query = $"SELECT * FROM orderList WHERE _id = @id";
+                string query = $"SELECT * FROM dishIngredients WHERE _id = @id";
                 using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = id;
@@ -66,61 +64,55 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
                     {
                         if (reader.Read())
                         {
-                            orderDish.Id = (int)reader["_id"];
-                            orderDish.idDish = (int)reader["idDish"];
-                            orderDish.idOrder = (int)reader["idOrder"];
-                            orderDish.Price = (decimal)reader["price"];
-                            orderDish.Count = (int)reader["count"];
+                            dishIngredient.Id = (int)reader["_id"];
+                            dishIngredient.idDish = (int)reader["idDish"];
+                            dishIngredient.idIngredient = (int)reader["idIngredient"];
                         }
 
                     }
                 }
             }
-            return orderDish;
+            return dishIngredient;
         }
 
-        public IEnumerable<OrderDish> GetAll()
+        public IEnumerable<DishIngredient> GetAll()
         {
-            var orderList = new List<OrderDish>();
+            var dishIngredients = new List<DishIngredient>();
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                string query = $"SELECT * FROM orderList";
+                string query = $"SELECT * FROM dishIngredients";
                 using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
                     using (SqlDataReader reader = cmd.ExecuteReader())
                     {
                         while (reader.Read())
                         {
-                            orderList.Add(new OrderDish
+                            dishIngredients.Add(new DishIngredient
                             {
                                 Id = (int)reader["_id"],
                                 idDish = (int)reader["idDish"],
-                                idOrder = (int)reader["idOrder"],
-                                Price = (decimal)reader["price"],
-                                Count = (int)reader["count"],
+                                idIngredient = (int)reader["idIngredient"],
                             });
                         }
 
                     }
                 }
             }
-            return orderList;
+            return dishIngredients;
         }
 
-        public bool Update(OrderDish entity)
+        public bool Update(DishIngredient entity)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
             {
                 sqlConnection.Open();
-                string query = $"UPDATE orderList SET idOrder = @idOrder, idDish = @idDish, count = @count, price = @price WHERE _id = @id";
+                string query = $"UPDATE dishIngredients SET idIngredient = @idIngredient, idDish = @idDish WHERE _id = @id";
                 using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
                 {
+                    cmd.Parameters.Add("@idIngredient", SqlDbType.Int).Value = entity.idIngredient;
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = entity.Id;
-                    cmd.Parameters.Add("@idOrder", SqlDbType.Int).Value = entity.idOrder;
-                    cmd.Parameters.Add("@idDish", SqlDbType.Int).Value = entity.Price;
-                    cmd.Parameters.Add("@count", SqlDbType.Int).Value = entity.Count;
-                    cmd.Parameters.Add("@price", SqlDbType.Decimal).Value = entity.Price;
+                    cmd.Parameters.Add("@idDish", SqlDbType.Int).Value = entity.idDish;
                     cmd.ExecuteNonQuery();
                 }
             }
