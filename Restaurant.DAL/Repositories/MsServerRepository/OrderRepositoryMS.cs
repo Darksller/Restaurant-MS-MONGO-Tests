@@ -29,7 +29,7 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
                 string query = $"INSERT INTO orders VALUES (@idPerson, @orderDate,@idStatus)";
                 using (var cmd = new SqlCommand(query, sqlConnection))
                 {
-                    cmd.Parameters.Add("@idPerson", SqlDbType.Int).Value = entity.CustomerId;
+                    cmd.Parameters.Add("@idPerson", SqlDbType.Int).Value = entity.User.Id;
                     cmd.Parameters.Add("@orderDate", SqlDbType.Date).Value = entity.OrderDate;
                     cmd.Parameters.Add("@idStatus", SqlDbType.Int).Value = entity.Status.Id;
                     cmd.ExecuteNonQuery();
@@ -116,7 +116,7 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
                 using (var cmd = new SqlCommand(query, sqlConnection))
                 {
                     cmd.Parameters.Add("@id", SqlDbType.Int).Value = entity.Id;
-                    cmd.Parameters.Add("@idPerson", SqlDbType.Int).Value = entity.CustomerId;
+                    cmd.Parameters.Add("@idPerson", SqlDbType.Int).Value = entity.User.Id;
                     cmd.Parameters.Add("@orderDate", SqlDbType.Date).Value = entity.OrderDate;
                     cmd.Parameters.Add("@idStatus", SqlDbType.Int).Value = entity.Status.Id;
                     cmd.ExecuteNonQuery();
