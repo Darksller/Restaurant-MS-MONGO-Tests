@@ -15,5 +15,7 @@ namespace Restaurant.Domain.Models
         public int idOrder { get; set; }
 
         public int Count { get; set; }
+
+        public Decimal Price { get; set; }
     }
 }

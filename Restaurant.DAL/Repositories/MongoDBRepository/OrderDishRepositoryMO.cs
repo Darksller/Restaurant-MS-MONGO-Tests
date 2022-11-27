@@ -60,7 +60,7 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                 {"_id", entity.Id},
                 {"idDish", dish.Id},
                 {"Name", dish.Name},
-                {"Price",dish.Price},
+                {"Price",entity.Price},
                 {"Count",entity.Count}
             };
 
@@ -106,6 +106,7 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                       { "idDish", "$Dishes.idDish"},
                       { "idDishOrder", "$Dishes._id"},
                       { "Count", "$Dishes.Count"},
+                      { "Price", "$Dishes.Price"},
                    }
                 }
             };
@@ -120,6 +121,7 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             orderDish.Id = item.GetValue("idDishOrder").ToInt32();
             orderDish.idDish = item.GetValue("idDish").ToInt32();
             orderDish.Count = item.GetValue("Count").ToInt32();
+            orderDish.Price = item.GetValue("Price").ToDecimal();
 
             return orderDish;
         }
@@ -139,6 +141,7 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                       { "idDish", "$Dishes.idDish"},
                       { "idDishOrder", "$Dishes._id"},
                       { "Count", "$Dishes.Count"},
+                      { "Price", "$Dishes.Price"},
                    }
                 }
             };
@@ -154,7 +157,8 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                     idOrder = item.GetValue("_id").ToInt32(),
                     Id = item.GetValue("idDishOrder").ToInt32(),
                     idDish = item.GetValue("idDish").ToInt32(),
-                    Count = item.GetValue("Count").ToInt32()
+                    Count = item.GetValue("Count").ToInt32(),
+                    Price = item.GetValue("Price").ToDecimal()
                 });
             }
 
@@ -166,7 +170,7 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             var dish = _dishRepositoryMO.Get(entity.idDish);
             var filter = Builders<BsonDocument>.Filter.Eq("_id", entity.idOrder) & Builders<BsonDocument>.Filter.Eq("Dishes._id", entity.Id);
             var update = Builders<BsonDocument>.Update.Set("Dishes.$.Name", dish.Name)
-                .Set("Dishes.$.Price", dish.Price).Set("Dishes.$.idDish", entity.idDish).Set("Dishes.$.Count", entity.Count);
+                .Set("Dishes.$.Price", dish.Price).Set("Dishes.$.idDish", entity.idDish).Set("Dishes.$.Count", entity.Count).Set("Dishes.$.Price", entity.Price);
             _mongoCollection.UpdateOne(filter, update);
             return true;
         }
