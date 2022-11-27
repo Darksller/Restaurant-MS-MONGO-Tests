@@ -5,6 +5,7 @@ using Restaurant.DAL.Repositories.MsServerRepository;
 using Restaurant.Domain.Models;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -60,7 +61,8 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                 {"_id", entity.Id},
                 {"idIngredient", ing.Id},
                 {"Name", ing.Name},
-                {"Price",ing.Price }
+                {"Price",ing.Price },
+                {"Count",entity.Count }
             };
 
             var arrayUpdate = Builders<BsonDocument>.Update.Push("Ingredients", bsonElements);
@@ -103,7 +105,9 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                    {
                       { "_id", "$_id"},
                       { "idIng", "$Ingredients.idIngredient"},
-                      { "idDishIng", "$Ingredients._id"}
+                      { "idDishIng", "$Ingredients._id"},
+                      { "Count", "$Ingredients.Count"},
+                      { "Price", "$Ingredients.Price"},
                    }
                 }
             };
@@ -117,6 +121,8 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             dishIngredient.idDish = item.GetValue("_id").ToInt32();
             dishIngredient.Id = item.GetValue("idDishIng").ToInt32();
             dishIngredient.idIngredient = item.GetValue("idIng").ToInt32();
+            dishIngredient.Count = item.GetValue("Count").ToInt32();
+            dishIngredient.Price = item.GetValue("Price").ToInt32();
 
             return dishIngredient;
         }
@@ -134,7 +140,9 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                    {
                       { "_id", "$_id"},
                       { "idIng", "$Ingredients.idIngredient"},
-                      { "idDishIng", "$Ingredients._id"}
+                      { "idDishIng", "$Ingredients._id"},
+                      { "Count", "$Ingredients.Count"},
+                      { "Price", "$Ingredients.Price"},
                    }
                 }
             };
@@ -149,7 +157,9 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                 {
                     idDish = item.GetValue("_id").ToInt32(),
                     Id = item.GetValue("idDishIng").ToInt32(),
-                    idIngredient = item.GetValue("idIng").ToInt32()
+                    idIngredient = item.GetValue("idIng").ToInt32(),
+                    Count = item.GetValue("Count").ToInt32(),
+                    Price = item.GetValue("Price").ToDecimal()
                 });
             }
 
@@ -161,7 +171,8 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             var ing = _ingredientRepositoryMO.Get(entity.idIngredient);
             var filter = Builders<BsonDocument>.Filter.Eq("_id", entity.idDish) & Builders<BsonDocument>.Filter.Eq("Ingredients._id", entity.Id);
             var update = Builders<BsonDocument>.Update.Set("Ingredients.$.Name", ing.Name)
-                .Set("Ingredients.$.Price", ing.Price).Set("Ingredients.$.idIngredient", entity.idIngredient);
+                .Set("Ingredients.$.Price", ing.Price).Set("Ingredients.$.idIngredient", entity.idIngredient).Set("Ingredients.$.Price", entity.Price)
+                .Set("Ingredients.$.Count", entity.Count);
             _mongoCollection.UpdateOne(filter, update);
             return true;
         }
