@@ -9,5 +9,6 @@ namespace Restaurant.DAL.Interfaces
 {
     public interface IOrderRepository : IBaseRepository<Order>
     {
+        public int GetNextOrderId();
     }
 }

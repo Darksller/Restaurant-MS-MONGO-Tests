@@ -107,6 +107,21 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             return orders;
         }
 
+        public int GetNextOrderId()
+        {
+            int id = 1;
+            using (var sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                string query = $"SELECT _id FROM orders ORDER BY _id DESC LIMIT 1";
+                using (var cmd = new SqlCommand(query, sqlConnection))
+                {
+                    id = (int)cmd.ExecuteScalar();
+                }
+            }
+            return id + 1;
+        }
+
         public bool Update(Order entity)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))

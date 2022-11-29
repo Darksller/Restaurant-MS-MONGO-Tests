@@ -3,6 +3,7 @@ using MongoDB.Driver;
 using MongoDB.Driver.Core.Configuration;
 using Restaurant.DAL.Interfaces;
 using Restaurant.Domain.Models;
+using SharpCompress.Common;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,9 +25,8 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
 
         public bool Create(Order entity)
         {
-            var obj = mongoCollection.Find("{}").Sort("{_id:-1}").Limit(1).ToList();
-            if (obj.Count == 0) entity.Id = 1;
-            else entity.Id = obj[0].GetValue("_id").ToInt32() + 1;
+
+            entity.Id = GetNextOrderId();
 
             var document = new BsonDocument
             {
@@ -126,6 +126,13 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
                 });
             }
             return orders;
+        }
+
+        public int GetNextOrderId()
+        {
+            var obj = mongoCollection.Find("{}").Sort("{_id:-1}").Limit(1).ToList();
+            if (obj.Count == 0) return 1;
+            else return obj[0].GetValue("_id").ToInt32() + 1;
         }
 
         public bool Update(Order entity)
