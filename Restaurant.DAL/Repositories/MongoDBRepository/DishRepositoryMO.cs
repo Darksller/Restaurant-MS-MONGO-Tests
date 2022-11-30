@@ -74,6 +74,18 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             return dishes;
         }
 
+        public Dish GetDishByName(string name)
+        {
+            var obj = mongoCollection.Find("{Name:\"" + name + "\"}").FirstOrDefault();
+            return new Dish()
+            {
+                Id = obj.GetValue("_id").ToInt32(),
+                Name = obj.GetValue("Name").ToString(),
+                Price = obj.GetValue("Price").ToDecimal(),
+                Recipe = obj.GetValue("Recipe").ToString()
+            };
+        }
+
         public bool Update(Dish entity)
         {
             var filter = Builders<BsonDocument>.Filter.Eq("_id", entity.Id);

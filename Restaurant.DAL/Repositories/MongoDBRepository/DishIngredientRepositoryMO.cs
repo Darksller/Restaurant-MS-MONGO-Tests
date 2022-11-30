@@ -166,6 +166,54 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             return dishIngredient;
         }
 
+        public List<DishIngredient> GetDishIngredientsByDishId(int dishId)
+        {
+            var pipeline = new BsonDocument
+            {
+                {"$unwind", "$Ingredients"}
+            };
+
+            var pipeline2 = new BsonDocument
+            {
+                { "$match", new BsonDocument
+                   {
+                      {"_id", dishId }
+                   }
+                }
+            };
+
+            var pipeline3 = new BsonDocument
+            {
+                { "$project", new BsonDocument
+                   {
+                      { "_id", "$_id"},
+                      { "idIng", "$Ingredients.idIngredient"},
+                      { "idDishIng", "$Ingredients._id"},
+                      { "Count", "$Ingredients.Count"},
+                      { "Price", "$Ingredients.Price"},
+                   }
+                }
+            };
+            BsonDocument[] pipelines = new BsonDocument[] { pipeline, pipeline2, pipeline3 };
+            List<BsonDocument> results = _mongoCollection.Aggregate<BsonDocument>(pipelines).ToList();
+
+            var dishIngredient = new List<DishIngredient>();
+
+            foreach (BsonDocument item in results)
+            {
+                dishIngredient.Add(new DishIngredient
+                {
+                    idDish = item.GetValue("_id").ToInt32(),
+                    Id = item.GetValue("idDishIng").ToInt32(),
+                    idIngredient = item.GetValue("idIng").ToInt32(),
+                    Count = item.GetValue("Count").ToInt32(),
+                    Price = item.GetValue("Price").ToDecimal()
+                });
+            }
+
+            return dishIngredient;
+        }
+
         public bool Update(DishIngredient entity)
         {
             var ing = _ingredientRepositoryMO.Get(entity.idIngredient);

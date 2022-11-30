@@ -9,5 +9,6 @@ namespace Restaurant.DAL.Interfaces
 {
     public interface IDishRepository : IBaseRepository<Dish>
     {
+        public Dish GetDishByName(string name);
     }
 }

@@ -47,6 +47,12 @@ namespace Restaurant.DAL.Repositories.MongoDBRepository
             return objs;
         }
 
+        public Ingredient GetIngredientByName(string name)
+        {
+            var obj = mongoCollection.Find("{Name:\"" + name + "\"}").FirstOrDefault();
+            return obj;
+        }
+
         public bool Update(Ingredient entity)
         {
             var filter = Builders<Ingredient>.Filter.Eq("_id", entity.Id);

@@ -6,12 +6,12 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Service.Interfaces
+namespace Restaurant.Service.Interfaces.Repositories
 {
-    internal interface IDishService
+    public interface IDishService
     {
         public List<Dish> GetMenu(IDishRepository dishRepository);
-        public String GetRecipe(int dishId, IDishRepository dishRepository);
+        public string GetRecipe(int dishId, IDishRepository dishRepository);
 
     }
 }

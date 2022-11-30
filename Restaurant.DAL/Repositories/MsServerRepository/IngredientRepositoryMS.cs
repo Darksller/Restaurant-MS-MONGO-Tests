@@ -103,6 +103,31 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             return ingredients;
         }
 
+        public Ingredient GetIngredientByName(string name)
+        {
+            Ingredient ingredient = new Ingredient();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                string query = $"SELECT * FROM ingredients WHERE name = @name";
+                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                {
+                    cmd.Parameters.Add("@name", SqlDbType.NChar).Value = name;
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            ingredient.Id = (int)reader["_id"];
+                            ingredient.Name = (string)reader["name"];
+                            ingredient.Price = (decimal)reader["price"];
+                        }
+
+                    }
+                }
+            }
+            return ingredient;
+        }
+
         public bool Update(Ingredient entity)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))

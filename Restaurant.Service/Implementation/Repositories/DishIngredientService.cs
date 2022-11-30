@@ -1,21 +1,22 @@
 ﻿using Restaurant.DAL.Interfaces;
 using Restaurant.Domain.Models;
 using Restaurant.Service.Interfaces;
+using Restaurant.Service.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Service.Implementation
+namespace Restaurant.Service.Implementation.Repositories
 {
     public class DishIngredientService : IDishIngredientService
     {
-        public Decimal GetDishCostPrice(int dishId, IDishIngredientRepository dishIngredientRepository)
+        public decimal GetDishCostPrice(int dishId, List<DishIngredient> dishIngredients)
         {
-            var dishesIngredients = dishIngredientRepository.GetAll();
-            Decimal sum = 0;
-            foreach (DishIngredient dishIng in dishesIngredients)
+            if (dishIngredients == null || dishIngredients.Count < 1 || dishId < 1) return -1;
+            decimal sum = 0;
+            foreach (DishIngredient dishIng in dishIngredients)
             {
                 if (dishIng.idDish == dishId)
                     sum += dishIng.Price * dishIng.Count;

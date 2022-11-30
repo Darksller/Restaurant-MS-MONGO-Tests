@@ -4,11 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Tests.Automatic
+namespace Restaurant.Service.Interfaces.Validations
 {
-
-    public class OrderServiceTest
+    public interface ICheckPrice
     {
-
+        public bool isValidPrice(int price);
     }
 }

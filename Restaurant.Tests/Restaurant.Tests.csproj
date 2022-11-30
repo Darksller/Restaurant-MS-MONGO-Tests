@@ -23,6 +23,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Restaurant.DAL\Restaurant.DAL.csproj" />
+    <ProjectReference Include="..\Restaurant.Service\Restaurant.Service.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Moq\" />
   </ItemGroup>
 
 </Project>

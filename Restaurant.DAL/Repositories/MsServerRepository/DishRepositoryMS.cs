@@ -106,6 +106,32 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             return dishes;
         }
 
+        public Dish GetDishByName(string name)
+        {
+            Dish dish = new Dish();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                string query = $"SELECT * FROM dishes WHERE name = @name";
+                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                {
+                    cmd.Parameters.Add("@name", SqlDbType.NChar).Value = name;
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        if (reader.Read())
+                        {
+                            dish.Id = (int)reader["_id"];
+                            dish.Name = (string)reader["name"];
+                            dish.Price = (decimal)reader["price"];
+                            dish.Recipe = (string)reader["recipe"];
+                        }
+
+                    }
+                }
+            }
+            return dish;
+        }
+
         public bool Update(Dish entity)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))

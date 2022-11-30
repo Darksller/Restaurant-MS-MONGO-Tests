@@ -109,6 +109,36 @@ namespace Restaurant.DAL.Repositories.MsServerRepository
             return dishIngredients;
         }
 
+        public List<DishIngredient> GetDishIngredientsByDishId(int dishId)
+        {
+            var dishIngredients = new List<DishIngredient>();
+            using (SqlConnection sqlConnection = new SqlConnection(_connectionString))
+            {
+                sqlConnection.Open();
+                string query = $"SELECT * FROM dishIngredients WHERE idDish = @idDish";
+                using (SqlCommand cmd = new SqlCommand(query, sqlConnection))
+                {
+                    cmd.Parameters.Add("@idDish", SqlDbType.Int).Value = dishId;
+                    using (SqlDataReader reader = cmd.ExecuteReader())
+                    {
+                        while (reader.Read())
+                        {
+                            dishIngredients.Add(new DishIngredient
+                            {
+                                Id = (int)reader["_id"],
+                                idDish = (int)reader["idDish"],
+                                idIngredient = (int)reader["idIngredient"],
+                                Count = (int)reader["count"],
+                                Price = (int)reader["price"]
+                            });
+                        }
+
+                    }
+                }
+            }
+            return dishIngredients;
+        }
+
         public bool Update(DishIngredient entity)
         {
             using (SqlConnection sqlConnection = new SqlConnection(_connectionString))

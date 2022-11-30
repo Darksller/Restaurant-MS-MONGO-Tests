@@ -1,20 +1,21 @@
 ﻿using Restaurant.DAL.Interfaces;
 using Restaurant.Domain.Models;
 using Restaurant.Service.Interfaces;
+using Restaurant.Service.Interfaces.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Service.Implementation
+namespace Restaurant.Service.Implementation.Repositories
 {
     public class OrderService : IOrderService
     {
-        public Decimal GetOrderInvoice(int idOrder, IOrderDishRepository orderDishRepository)
+        public decimal GetOrderInvoice(int idOrder, IOrderDishRepository orderDishRepository)
         {
             var orderDishes = orderDishRepository.GetAll();
-            Decimal sum = 0;
+            decimal sum = 0;
             foreach (OrderDish orderDish in orderDishes)
             {
                 if (orderDish.idOrder == idOrder)

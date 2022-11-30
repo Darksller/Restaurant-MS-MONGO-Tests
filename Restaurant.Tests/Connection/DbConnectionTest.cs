@@ -13,7 +13,7 @@ using static MongoDB.Libmongocrypt.CryptContext;
 
 namespace Restaurant.Tests.Connection
 {
-    public class DbConnectionTests
+    public class DbConnectionTest
     {
         [Fact]
         public void MsServer_IncorrectPathTest_Exception()

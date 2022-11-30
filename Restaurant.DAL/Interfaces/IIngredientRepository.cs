@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 
 namespace Restaurant.DAL.Interfaces
 {
-    public interface IIngredientRepository: IBaseRepository<Ingredient>
+    public interface IIngredientRepository : IBaseRepository<Ingredient>
     {
+        public Ingredient GetIngredientByName(string name);
     }
 }

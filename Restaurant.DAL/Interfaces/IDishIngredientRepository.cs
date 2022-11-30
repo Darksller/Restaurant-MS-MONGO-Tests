@@ -9,5 +9,6 @@ namespace Restaurant.DAL.Interfaces
 {
     public interface IDishIngredientRepository : IBaseRepository<DishIngredient>
     {
+        public List<DishIngredient> GetDishIngredientsByDishId(int dishId);
     }
 }

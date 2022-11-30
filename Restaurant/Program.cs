@@ -1,6 +1,8 @@
 ﻿using Restaurant.DAL.Repositories.MongoDBRepository;
 using Restaurant.DAL.Repositories.MsServerRepository;
 using Restaurant.Service.Implementation;
+using Restaurant.Service.Implementation.Repositories;
+using Restaurant.Tests.Integrated;
 
 namespace Restaurant
 {
@@ -10,11 +12,7 @@ namespace Restaurant
         {
             string connectionString = "mongodb://localhost:27017";
 
-            var d = new OrderDishRepositoryMS(connectionString);
-
-            var dd = new OrderService();
-
-            dd.MakeOrder(null, new OrderRepositoryMO(connectionString), new StatusRepositoryMO(connectionString));
+            
         }
     }
 }

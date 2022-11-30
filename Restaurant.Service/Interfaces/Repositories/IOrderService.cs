@@ -6,11 +6,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Restaurant.Service.Interfaces
+namespace Restaurant.Service.Interfaces.Repositories
 {
-    internal interface IOrderService
+    public interface IOrderService
     {
-        public Decimal GetOrderInvoice(int idOrder, IOrderDishRepository orderDishRepository);
+        public decimal GetOrderInvoice(int idOrder, IOrderDishRepository orderDishRepository);
         public int MakeOrder(User user, IOrderRepository orderRepository, IStatusRepository statusRepository);
         public bool FillOrder(List<OrderDish> orderDishes, IOrderDishRepository orderDishRepository);
         public List<Order> OrdersForThePeriod(DateTime leftSide, DateTime rightSide, IOrderRepository orderRepository);
