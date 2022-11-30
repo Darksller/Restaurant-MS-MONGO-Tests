@@ -11,8 +11,8 @@ using System.Threading.Tasks;
 
 namespace Restaurant.Tests.Integrated
 {
-    [TestCaseOrderer("Restaurant.Tests.Integrated.Configuration", "Restaurant.Tests.Integrated")]
-    public class DishIngredientServiceIntegradtedTest
+    [TestCaseOrderer("Restaurant.Tests.Integrated.PriorityOrderer", "Restaurant.Tests")]
+    public class DishIngredientServiceIntegratedTest
     {
         private readonly string _connectionString = "mongodb://localhost:27017";
 

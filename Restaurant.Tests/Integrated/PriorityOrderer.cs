@@ -1,17 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Xunit.Abstractions;
 using Xunit.Sdk;
 
 namespace Restaurant.Tests.Integrated
 {
-    public class Configuration : ITestCaseOrderer
+    public class PriorityOrderer : ITestCaseOrderer
     {
         public IEnumerable<TTestCase> OrderTestCases<TTestCase>(
-            IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
+           IEnumerable<TTestCase> testCases) where TTestCase : ITestCase
         {
             string assemblyName = typeof(TestPriorityAttribute).AssemblyQualifiedName!;
             var sortedMethods = new SortedDictionary<int, List<TTestCase>>();
